@@ -1,6 +1,7 @@
 import mongoose, { ObjectId } from "mongoose";
 import Message from "../database/models/Message";
 import User from "../database/models/User";
+import Chat from "../database/models/Conversation";
 
 async function isUserExist(toUserId: string): Promise<boolean> {
   let user = await User.exists({ _id: new mongoose.Types.ObjectId(toUserId) });
@@ -17,4 +18,10 @@ async function saveMessage(message: any, chatId: string, senderId: string): Prom
   return msg;
 }
 
-export { isUserExist, saveMessage };
+async function isChatExists(chatId: string): Promise<boolean> {
+  let chat = await Chat.exists({ _id: new mongoose.Types.ObjectId(chatId) });
+  if (chat) return true;
+  return false;
+}
+
+export { isUserExist, saveMessage, isChatExists };
