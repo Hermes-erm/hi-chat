@@ -2,7 +2,7 @@ import { Schema } from "mongoose";
 import User from "./User";
 import { chatAppConnection } from "../connection";
 
-const conversationSchema: Schema = new Schema(
+const chatSchema: Schema = new Schema(
   {
     type: { type: String, required: true, enum: ["direct", "room"] },
     members: [{ member: { type: Schema.Types.ObjectId, ref: User } }],
@@ -11,6 +11,6 @@ const conversationSchema: Schema = new Schema(
   { timestamps: true, versionKey: false }
 );
 
-const Conversation = chatAppConnection.model("conversation", conversationSchema, "conversation");
+const Chat = chatAppConnection.model("conversation", chatSchema, "conversation");
 
-export default Conversation;
+export default Chat;

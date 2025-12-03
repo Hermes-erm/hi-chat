@@ -36,7 +36,7 @@ const login = async (req: Request, res: Response) => {
       sameSite: "none",
       secure: false,
     })
-    .json({ token: token, message: "Logged in successfully, token sent!", success: true });
+    .json({ token: token, data: user, message: "Logged in successfully, token sent!", success: true });
 };
 
 export { createUser, login };
