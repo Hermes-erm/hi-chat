@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import User from "../database/models/User";
 import dotenv from "dotenv";
 import { Socket } from "socket.io";
 import { NextFunction } from "connect";

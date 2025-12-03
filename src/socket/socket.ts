@@ -6,9 +6,9 @@ import { createAdapter } from "@socket.io/redis-adapter";
 import { instrument } from "@socket.io/admin-ui";
 import { app, client, pub, sub } from "../app";
 import { verifyToken } from "../controller/socketMiddleware";
-import { isChatExists, isUserExist, saveMessage } from "../services/apiService";
+import chatService from "../services/chat.service";
 import Chat from "../database/models/Conversation";
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -30,13 +30,13 @@ chat.on("connection", async (socket: Socket) => {
     let senderId: string = userId;
     let chatId: string | undefined = payload.chatId;
 
-    if (chatId && !(await isChatExists(chatId))) {
+    if (chatId && !(await chatService.isChatExists(chatId))) {
       if (ack) ack({ message: "room not found" });
       return;
     }
 
-    let sender = new mongoose.Types.ObjectId(senderId);
     if (!chatId) {
+      let sender = new mongoose.Types.ObjectId(senderId);
       let chat: any = await Chat.create({ type: "room", members: [sender] });
       chatId = chat._id;
     }
@@ -53,25 +53,18 @@ chat.on("connection", async (socket: Socket) => {
     let toUserId: string = payload.toUserId;
     let content: any = payload.content;
 
-    if (!(await isUserExist(toUserId))) {
+    if (!(await chatService.isUserExist(toUserId))) {
       if (ack) ack({ message: "Recipient not found", ok: true });
       return;
     }
 
-    if (!chatId) {
-      let sender = new mongoose.Types.ObjectId(senderId);
-      let toUser = new mongoose.Types.ObjectId(toUserId);
+    if (!chatId) chatId = await chatService.createChatIfNotExists("direct", [senderId, toUserId]);
 
-      let chat = await Chat.findOne({ members: { $all: [sender, toUser] } });
-      if (!chat) chat = await Chat.create({ type: "direct", members: [sender, toUser] });
-      chatId = chat._id;
-    }
-
-    await saveMessage(content, chatId, senderId);
+    await chatService.saveMessage(content, chatId, senderId);
 
     let recipient: any | null = await client.get(toUserId);
 
-    if (recipient) socket.to(recipient).emit("message", { message: content });
+    if (recipient) socket.to(recipient).emit("message", { message: content, from: userName });
   });
 
   socket.on("message:room", async (payload, ack) => {
@@ -82,9 +75,9 @@ chat.on("connection", async (socket: Socket) => {
 
     if (!chatId) return;
 
-    let message = await saveMessage(content, chatId, senderId);
+    let message = await chatService.saveMessage(content, chatId, senderId);
 
-    socket.to(`room:${chatId}`).emit("message", { message: message.content });
+    socket.to(`room:${chatId}`).emit("message", { message: message.content, from: userName });
   });
 
   socket.on("leave:room", ({ chatId }) => {
