@@ -35,6 +35,16 @@ class ChatService {
     if (!chat) chat = await Chat.create({ type: chatType, members: [sender, toUser] });
     return chat._id;
   }
+
+  async addMemberIfNotExists(chatId: string, member: string) {
+    let roomId = new mongoose.Types.ObjectId(chatId);
+    let user = new mongoose.Types.ObjectId(member);
+
+    let chat = await Chat.findOne({ _id: roomId, members: user });
+    if (chat) return;
+
+    await Chat.findOneAndUpdate({ _id: roomId }, { $push: { members: user } });
+  }
 }
 
 export default new ChatService();

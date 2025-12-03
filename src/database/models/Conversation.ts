@@ -5,7 +5,7 @@ import { chatAppConnection } from "../connection";
 const chatSchema: Schema = new Schema(
   {
     type: { type: String, required: true, enum: ["direct", "room"] },
-    members: [{ member: { type: Schema.Types.ObjectId, ref: User } }],
+    members: [{ type: Schema.Types.ObjectId, ref: User }],
     roomName: { type: String },
   },
   { timestamps: true, versionKey: false }

@@ -11,9 +11,13 @@ import Chat from "../database/models/Conversation";
 import mongoose from "mongoose";
 
 const httpServer = createServer(app);
+
 const io = new Server(httpServer, {
   adapter: createAdapter(pub, sub),
-  cors: { origin: "*" },
+  cors: {
+    origin: "*",
+    credentials: true,
+  },
 });
 
 // instrument(io, { auth: false });
@@ -39,7 +43,7 @@ chat.on("connection", async (socket: Socket) => {
       let sender = new mongoose.Types.ObjectId(senderId);
       let chat: any = await Chat.create({ type: "room", members: [sender] });
       chatId = chat._id;
-    }
+    } else await chatService.addMemberIfNotExists(chatId, senderId);
 
     socket.join(`room:${chatId}`);
   });
