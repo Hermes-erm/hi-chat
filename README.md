@@ -58,7 +58,7 @@ Start the server
 
 | Parameter | Type     | Description             |
 | :-------- | :------- | :---------------------- |
-| `id`      | `string` | **Required**. JWT token |
+| `chatId`  | `string` | **Required**. JWT token |
 
 #### chat history
 
@@ -69,5 +69,6 @@ Start the server
 
 | Parameter | Type     | Description  |
 | :-------- | :------- | :----------- |
+| `chatId`  | `string` | **Required** |
 | `limit`   | `string` | **Required** |
 | `before`  | `Date`   |              |
