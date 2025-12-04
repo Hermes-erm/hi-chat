@@ -7,7 +7,7 @@ Langs & frameworks: Express + Ts, ioredis, socket.io, mongodb, redis
 ## Features
 
 - chat 1:1
-- Many : Many (room)
+- 1 : Many (room)
 - User authentication
 - Data persistence
 
