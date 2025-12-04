@@ -25,6 +25,18 @@ Go to the project directory
   cd hi-chat
 ```
 
+Create there .env file
+
+```bash
+  MONGO_CHATAPP = mongodb://localhost:27017/chatdb
+
+  REDIS_URL = redis://localhost:6379
+
+  JWT_SECRET_KEY = somekey
+
+  PORT = 3000
+```
+
 Install dependencies
 
 ```bash
