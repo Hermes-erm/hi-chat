@@ -1,2 +1,73 @@
-# hi-chat
-chat app (builded-up)
+# hi chat
+
+A pub/sub-based chat application
+
+Langs & frameworks: Express + Ts, ioredis, socket.io, mongodb, redis
+
+## Features
+
+- chat 1:1
+- Many : Many (room)
+- User authentication
+- Data persistence
+
+## Run Locally
+
+Clone | fork -> clone the project
+
+```bash
+  git clone https://github.com/Hermes-erm/hi-chat.git
+```
+
+Go to the project directory
+
+```bash
+  cd hi-chat
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run build
+  npm start
+```
+
+## API Reference
+
+#### Get chats
+
+```http
+  GET /chat/user/:id
+```
+
+| Parameter | Type     | Description             |
+| :-------- | :------- | :---------------------- |
+| `id`      | `string` | **Required**. JWT token |
+
+#### List room members
+
+```http
+  GET /chat/members/:chatId
+```
+
+| Parameter | Type     | Description             |
+| :-------- | :------- | :---------------------- |
+| `id`      | `string` | **Required**. JWT token |
+
+#### chat history
+
+```http
+  GET /chat/history/:chatId?limit={50}&before={2025-12-03T10:13:04.273Z}
+
+```
+
+| Parameter | Type     | Description  |
+| :-------- | :------- | :----------- |
+| `limit`   | `string` | **Required** |
+| `before`  | `Date`   |              |
