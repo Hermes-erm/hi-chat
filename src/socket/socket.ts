@@ -30,6 +30,7 @@ chat.on("connection", async (socket: Socket) => {
   let { userId, userName } = socket.user;
   await client.set(userId, socket.id);
 
+  // [join room]
   socket.on("join:room", async (payload, ack) => {
     let senderId: string = userId;
     let chatId: string | undefined = payload.chatId;
@@ -48,6 +49,7 @@ chat.on("connection", async (socket: Socket) => {
     socket.join(`room:${chatId}`);
   });
 
+  // [ one:one chat ]
   socket.on("message:chat", async (payload, ack) => {
     if (!payload.toUserId) if (ack) ack({ message: "Recipient not found", ok: true });
 
@@ -71,6 +73,7 @@ chat.on("connection", async (socket: Socket) => {
     if (recipient) socket.to(recipient).emit("message", { message: content, from: userName });
   });
 
+  // [room chat]
   socket.on("message:room", async (payload, ack) => {
     let senderId: string = userId;
 
