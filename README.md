@@ -11,6 +11,10 @@ Langs & frameworks: Express + Ts, ioredis, socket.io, mongodb, redis
 - User authentication
 - Data persistence
 
+### System Workflow
+
+<img width="808" height="727" alt="image" src="https://github.com/user-attachments/assets/e2df75d1-2b2e-41c3-947f-d890a7c04925" />
+
 ## Run Locally
 
 Clone | fork -> clone the project
